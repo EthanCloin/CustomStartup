@@ -1,13 +1,11 @@
-import os
 import logging
 from logging.config import dictConfig
 from pathlib import Path
 
 from config import LOGGING_CONFIG
-import sites
-from sites import ChromeProfile, SiteInfo
-import applications
-from applications import AppInfo
+from openers import applications, sites
+from openers.sites import ChromeProfile, SiteInfo
+from openers.applications import AppInfo
 
 dictConfig(LOGGING_CONFIG)
 _log = logging.getLogger(__name__)
@@ -33,7 +31,7 @@ class StartupType:
 
 if __name__ == "__main__":
     sublime_app: AppInfo = AppInfo(
-        name="Sublime Text", path=Path("/Applications/Sublime\ " "Text.app")
+        name="Sublime Text", path=Path("/Applications/Sublime\ Text.app")
     )
     support_inbox: SiteInfo = SiteInfo(
         name="Hubspot Inbox",

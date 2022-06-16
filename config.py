@@ -1,8 +1,3 @@
-import os
-from dotenv import load_dotenv
-from pathlib import Path
-
-
 LOGGING_CONFIG = {
     "version": 1,
     "disable_existing_loggers": True,
@@ -33,7 +28,11 @@ LOGGING_CONFIG = {
             "level": "WARNING",
             "propagate": False,
         },
-        "sample_pkg": {"handlers": ["default"], "level": "INFO", "propagate": False},
+        "openers": {
+            "handlers": ["debug"],
+            "level": "DEBUG",
+            "propagate": False
+        },
         "__main__": {
             "handlers": ["debug"],
             "level": "DEBUG",

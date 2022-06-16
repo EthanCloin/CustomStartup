@@ -13,6 +13,7 @@ class AppInfo:
 
 
 def open_apps(apps: list[AppInfo]) -> bool:
+    print(__name__)
     for app in apps:
         exit_code: int = os.system(f"open {app.path}")
         _log.debug(f"opened {app.name} using {app.path} with exit code {exit_code}")
