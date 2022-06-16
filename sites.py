@@ -1,4 +1,5 @@
 import os
+import logging
 from dotenv import load_dotenv
 from enum import Enum
 from dataclasses import dataclass
@@ -6,6 +7,7 @@ import webbrowser
 from webbrowser import GenericBrowser
 
 load_dotenv()
+_log = logging.getLogger(__name__)
 
 
 class ChromeProfile(str, Enum):
@@ -20,36 +22,28 @@ class SiteInfo:
     profile: ChromeProfile
 
 
-# TODO: refactor to not expect profile and instead pull from SiteInfo
 def open_all_sites(sites: list[SiteInfo]):
-    open_profiles: list = []
     open_browsers: dict = {}
 
     for site in sites:
         profile_name: str = site.profile.name
-        if profile_name not in open_profiles:
+        if profile_name not in open_browsers.keys():
             try:
                 new_browser: GenericBrowser = open_new_browser_with_profile(site.profile)
                 open_browsers[profile_name] = new_browser
-                open_profiles.append(profile_name)
+
             except Exception as err:
                 print(err)
-        browser: GenericBrowser = open_browsers.get(profile_name)
-        browser.open(site.url)
 
-    # check if provided profile has already been used to open anything
-    # if not, open a new window with profile and add to list of opened
-    # open the url
-    pass
+            _log.debug(f"added {profile_name} to open browsers")
+        open_browsers.get(profile_name).open(site.url)
 
 
 def open_new_browser_with_profile(profile: ChromeProfile) -> GenericBrowser:
     open_chrome_cmd: str = (
         f"open --new -b com.google.Chrome --args --profile-directory={profile.value} %s"
     )
-    new_chrome_browser: GenericBrowser = webbrowser.get(using=open_chrome_cmd)
-    print(type(new_chrome_browser))
-    return new_chrome_browser
+    return webbrowser.get(using=open_chrome_cmd)
 
 
 if __name__ == '__main__':
