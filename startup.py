@@ -1,14 +1,12 @@
 import os
 import logging
 import webbrowser
-from enum import Enum
-
 from dotenv import load_dotenv
 from logging.config import dictConfig
 from pathlib import Path
 from dataclasses import dataclass
 from config import LOGGING_CONFIG
-from time import sleep
+from sites import ChromeProfile, SiteInfo
 
 dictConfig(LOGGING_CONFIG)
 _log = logging.getLogger(__name__)
@@ -22,18 +20,6 @@ WORK = os.getenv("CHROME_WORK_PROFILE")
 class AppInfo:
     name: str
     cli_cmd: Path or str  # passed to 'open' cmd
-
-
-class ChromeProfile(str, Enum):
-    PERSONAL = PERSONAL
-    WORK = WORK
-
-
-@dataclass
-class SiteInfo:
-    name: str
-    url: str
-    profile: ChromeProfile
 
 
 class StartupType:
@@ -64,14 +50,6 @@ class StartupType:
 
 if __name__ == "__main__":
     # my_app: AppInfo = AppInfo(name="Macdown", cli_cmd=Path("/Applications/MacDown.app"))
-    chrome_personal: AppInfo = AppInfo(
-        name="Chrome 1",
-        cli_cmd=f"--new -b com.google.Chrome --args --profile-directory={PERSONAL}",
-    )
-    chrome_work: AppInfo = AppInfo(
-        name="Chrome 2",
-        cli_cmd=f"--new -b com.google.Chrome --args --profile-directory={WORK}",
-    )
 
     my_site: SiteInfo = SiteInfo(
         name="Don't Ask",
@@ -80,7 +58,7 @@ if __name__ == "__main__":
     )
 
     basic_test: StartupType = StartupType(
-        "Basic", [chrome_work, chrome_personal], [my_site]
+        "Basic", [], [my_site]
     )
     # basic_test.open_apps()
     # sleep(3)
