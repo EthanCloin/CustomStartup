@@ -1,29 +1,6 @@
 import os
 from dotenv import load_dotenv
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver import ChromeOptions
-from webdriver_manager.chrome import ChromeDriverManager
 from pathlib import Path
-from time import sleep
-
-
-def configure_selenium(chrome_profile: str):
-
-    options = ChromeOptions()
-    options.add_argument(f"--profile-directory={chrome_profile}")
-    options.add_argument(f"--user-data-dir={chrome_profile}")
-
-    print(options.arguments)
-
-    driver = webdriver.Chrome(
-        options=options,
-        executable_path="/Users/ethancloin/Developer/PortfolioProjects/selenium/chromedriver.exe",
-        service=Service(ChromeDriverManager().install()),
-    )
-    driver.get("https://www.google.com")
-    sleep(5)
-    driver.quit()
 
 
 LOGGING_CONFIG = {
