@@ -29,15 +29,16 @@ def open_all_sites(sites: list[SiteInfo]):
         profile_name: str = site.profile.name
         if profile_name not in open_browsers.keys():
             try:
-                new_browser: GenericBrowser = open_new_browser_with_profile(site.profile)
+                new_browser: GenericBrowser = open_new_browser_with_profile(
+                    site.profile
+                )
                 open_browsers[profile_name] = new_browser
 
             except Exception as err:
                 print(err)
 
-            _log.debug(f"added {profile_name} to open browsers")
         open_browsers.get(profile_name).open(site.url)
-        _log.debug(f"opened {site.url} under {profile_name}")
+        _log.info(f"opened {site.url} under {profile_name}")
 
 
 def open_new_browser_with_profile(profile: ChromeProfile) -> GenericBrowser:
@@ -47,16 +48,5 @@ def open_new_browser_with_profile(profile: ChromeProfile) -> GenericBrowser:
     return webbrowser.get(using=open_chrome_cmd)
 
 
-if __name__ == '__main__':
-    my_site: SiteInfo = SiteInfo(
-        name="Don't Ask",
-        url="https://dontasktoask.com/",
-        profile=ChromeProfile.PERSONAL,
-    )
-    other_site: SiteInfo = SiteInfo(
-        name="Don't Ask",
-        url="https://dontasktoask.com/",
-        profile=ChromeProfile.WORK,
-    )
-
-    open_all_sites([my_site, other_site])
+if __name__ == "__main__":
+    pass

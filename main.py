@@ -1,8 +1,15 @@
+import logging
+import logging.config
 import argparse
 from openers.startup import WORK_BASICS
+from config import LOGGING_CONFIG
 
 
-if __name__ == "__main__":
+logging.config.dictConfig(LOGGING_CONFIG)
+_log = logging.getLogger(__name__)
+
+
+def main():
     parser = argparse.ArgumentParser(
         description="CLI tool to open defined sets of websites and apps"
     )
@@ -12,7 +19,6 @@ if __name__ == "__main__":
         "--work",
         help="flag to startup with WORK preset",
         action="store_true",
-        default=True,
     )
     startup_options.add_argument(
         "-p",
@@ -21,9 +27,12 @@ if __name__ == "__main__":
         action="store_true",
     )
     args: argparse.Namespace = parser.parse_args()
-    print(args)
+    _log.debug("args: {}".format(args))
 
     if args.work:
-        print("running")
         WORK_BASICS.open_apps()
         WORK_BASICS.open_websites()
+
+
+if __name__ == "__main__":
+    main()

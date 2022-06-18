@@ -13,15 +13,14 @@ class AppInfo:
 
 
 def open_apps(apps: list[AppInfo]) -> bool:
-    print(__name__)
+
     for app in apps:
         exit_code: int = os.system(f"open {app.path}")
-        _log.debug(f"opened {app.name} using {app.path} with exit code {exit_code}")
+        _log.debug("opened {} with exit code {}".format(app.name, exit_code))
 
     exit_codes: list[int] = [os.system(f"open {app.path}") for app in apps]
     return all(code == 0 for code in exit_codes)
 
 
-if __name__ == '__main__':
-    print(open_apps([AppInfo("Macdown", "/Applications/MacDown.app")]))
-
+if __name__ == "__main__":
+    pass
