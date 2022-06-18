@@ -49,7 +49,7 @@ support_manual_doc = SiteInfo(
 personal_email = SiteInfo(
     name="Personal Gmail",
     url="https://mail.google.com/mail/u/0/#inbox",
-    profile=ChromeProfile.WORK,
+    profile=ChromeProfile.PERSONAL,
 )
 
 # APPS

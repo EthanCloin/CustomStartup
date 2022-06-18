@@ -28,17 +28,13 @@ def open_all_sites(sites: list[SiteInfo]):
     for site in sites:
         profile_name: str = site.profile.name
         if profile_name not in open_browsers.keys():
-            try:
-                new_browser: GenericBrowser = open_new_browser_with_profile(
-                    site.profile
-                )
-                open_browsers[profile_name] = new_browser
-
-            except Exception as err:
-                print(err)
-
+            new_browser: GenericBrowser = open_new_browser_with_profile(
+                site.profile
+            )
+            # store opened browsers in dictionary using profile_name as key
+            open_browsers[profile_name]: GenericBrowser = new_browser
         open_browsers.get(profile_name).open(site.url)
-        _log.info(f"opened {site.url} under {profile_name}")
+        _log.info("opened {} under {}".format(site.url, profile_name))
 
 
 def open_new_browser_with_profile(profile: ChromeProfile) -> GenericBrowser:
