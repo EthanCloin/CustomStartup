@@ -1,6 +1,5 @@
 import logging
 from logging.config import dictConfig
-from pathlib import Path
 
 from config import LOGGING_CONFIG
 from openers import applications, sites
@@ -30,27 +29,55 @@ class StartupType:
 
 
 if __name__ == "__main__":
-    sublime_app: AppInfo = AppInfo(
-        name="Sublime Text", path=Path("/Applications/Sublime\ Text.app")
-    )
-    support_inbox: SiteInfo = SiteInfo(
-        name="Hubspot Inbox",
-        url="https://app.hubspot.com/live-messages/3982111/inbox/",
-        profile=ChromeProfile.WORK,
-    )
-    github_home: SiteInfo = SiteInfo(
-        name="Github",
-        url="https://github.com/ethancloin",
-        profile=ChromeProfile.PERSONAL,
-    )
+    pass
 
-    my_apps: list[AppInfo] = [sublime_app]
-    my_sites: list[SiteInfo] = [support_inbox, github_home]
-    startup_test: StartupType = StartupType(
-        name="Test",
-        apps=my_apps,
-        websites=my_sites,
-    )
 
-    startup_test.open_apps()
-    startup_test.open_websites()
+# define sites to open
+github_home = SiteInfo(
+    name="Github",
+    url="https://github.com/ethancloin",
+    profile=ChromeProfile.PERSONAL,
+)
+support_inbox = SiteInfo(
+    name="Hubspot Inbox",
+    url="https://app.hubspot.com/live-messages/3982111/inbox/",
+    profile=ChromeProfile.WORK,
+)
+work_email_inbox = SiteInfo(
+    name="Hazlnut Gmail Inbox",
+    url="https://mail.google.com/mail/u/0/#inbox",
+    profile=ChromeProfile.WORK,
+)
+support_manual_doc = SiteInfo(
+    name="Hazlnut Support Manual",
+    url="https://docs.google.com/document/d/1w9eYWqIgOo4wgm5GJZKucFdbEk0c1k8STMzKE5E6dhI/edit",
+    profile=ChromeProfile.WORK,
+)
+
+# define apps to open
+slack = AppInfo(
+    name="Slack",
+    path="/Applications/Slack.app",
+)
+notion = AppInfo(
+    name="Notion",
+    path="/Applications/Notion.app",
+)
+data_grip = AppInfo(
+    name="DataGrip",
+    path="/Applications/DataGrip.app",
+)
+pycharm = AppInfo(
+    name="PyCharm",
+    path="/Applications/PyCharm.app",
+)
+one_password = AppInfo(
+    name="1Password",
+    path="/Applications/1Password\ 7.app",
+)
+
+WORK_BASICS = StartupType(
+    name="Work Basics",
+    websites=[github_home, support_inbox, support_manual_doc, work_email_inbox],
+    apps=[slack, notion, data_grip, pycharm, one_password],
+)

@@ -37,6 +37,7 @@ def open_all_sites(sites: list[SiteInfo]):
 
             _log.debug(f"added {profile_name} to open browsers")
         open_browsers.get(profile_name).open(site.url)
+        _log.debug(f"opened {site.url} under {profile_name}")
 
 
 def open_new_browser_with_profile(profile: ChromeProfile) -> GenericBrowser:
