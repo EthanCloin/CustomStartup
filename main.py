@@ -1,7 +1,7 @@
 import logging
 import logging.config
 import argparse
-from openers.startup import WORK_BASICS, DEFAULT_STARTUP
+from openers.startup import WORK_BASICS, DEFAULT_STARTUP, TEST_STARTUP
 from config import LOGGING_CONFIG
 
 
@@ -32,12 +32,20 @@ def main():
         help="flag to startup with DEFAULT preset",
         action="store_true",
         default=True,
+    ),
+    startup_options.add_argument(
+        "-t",
+        "--test",
+        help="flag to startup with TEST preset",
+        action="store_true",
     )
     args: argparse.Namespace = parser.parse_args()
     _log.debug("args: {}".format(args))
 
     if args.work:
         WORK_BASICS.run_startup()
+    elif args.test:
+        TEST_STARTUP.run_startup()
     elif args.default:
         DEFAULT_STARTUP.run_startup()
 

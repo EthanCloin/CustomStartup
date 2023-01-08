@@ -12,7 +12,10 @@ _log = logging.getLogger(__name__)
 
 class StartupType:
     def __init__(
-        self, name: str, applications: list[AppInfo] = None, websites: list[SiteInfo] = None
+        self,
+        name: str,
+        applications: list[AppInfo] = None,
+        websites: list[SiteInfo] = None,
     ):
         self.name = name
         self.applications = applications
@@ -24,6 +27,7 @@ class StartupType:
     def run_startup(self):
         apps.open_apps(self.applications)
         sites.open_all_sites(self.websites)
+
 
 # SITES
 github_home = SiteInfo(
@@ -91,8 +95,8 @@ WORK_BASICS = StartupType(
 DEFAULT_STARTUP = StartupType(
     name="Default",
     applications=[one_password, flycut, discord],
-    websites=[personal_email]
+    websites=[personal_email],
 )
-
+TEST_STARTUP = StartupType(name="Test", applications=[discord], websites=[github_home])
 if __name__ == "__main__":
     pass
