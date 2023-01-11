@@ -3,6 +3,12 @@ from dataclasses import dataclass, field
 from openers.apps import AppInfo
 from openers.sites import SiteInfo
 from openers.startup import StartupType
+import logging
+from logging.config import dictConfig
+from config import LOGGING_CONFIG
+
+dictConfig(LOGGING_CONFIG)
+_log = logging.getLogger(__name__)
 
 
 @dataclass
@@ -23,13 +29,17 @@ class StartupJson:
 
         return [mode for mode in self.startup_modes if mode.name == mode_name][0]
 
-    def store_startup(self, mode: StartupType) -> StartupType:
+    def store_startup(self, mode: StartupType) -> None:
         """adds startup_mode to file if one does not already exist under its name"""
         if mode.name in self.mode_names:
             raise KeyError("startup mode '%s' already exists!" % mode.name)
 
         self.startup_modes.append(mode)
         self.mode_names.append(mode.name)
+
+    def update_startup(self, prev_name: str, updated_mode: StartupType):
+        if prev_name not in self.mode_names:
+            raise KeyError("startup mode '%s' does not exist!" % prev_name)
 
 
 """

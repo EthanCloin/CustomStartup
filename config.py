@@ -29,6 +29,7 @@ LOGGING_CONFIG = {
             "propagate": False,
         },
         "openers": {"handlers": ["debug"], "level": "DEBUG", "propagate": False},
+        "storage": {"handlers": ["debug"], "level": "DEBUG", "propagate": False},
         "__main__": {
             "handlers": ["debug"],
             "level": "DEBUG",
