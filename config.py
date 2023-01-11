@@ -1,3 +1,5 @@
+from pathlib import Path
+
 LOGGING_CONFIG = {
     "version": 1,
     "disable_existing_loggers": True,
@@ -37,3 +39,4 @@ LOGGING_CONFIG = {
         },
     },
 }
+STORAGE_PATH = Path("storage/user_startups.json")
