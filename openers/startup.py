@@ -10,7 +10,7 @@ dictConfig(LOGGING_CONFIG)
 _log = logging.getLogger(__name__)
 
 
-class StartupType:
+class StartupRoutine:
     def __init__(
         self,
         name: str,
@@ -87,16 +87,18 @@ discord = AppInfo(
 )
 
 # STARTUPS
-WORK_BASICS = StartupType(
+WORK_BASICS = StartupRoutine(
     name="Work Basics",
     websites=[github_home, support_inbox, support_manual_doc, work_email_inbox],
     applications=[slack, notion, data_grip, pycharm, one_password, flycut],
 )
-DEFAULT_STARTUP = StartupType(
+DEFAULT_STARTUP = StartupRoutine(
     name="Default",
     applications=[one_password, flycut, discord],
     websites=[personal_email],
 )
-TEST_STARTUP = StartupType(name="Test", applications=[discord], websites=[github_home])
+TEST_STARTUP = StartupRoutine(
+    name="Test", applications=[discord], websites=[github_home]
+)
 if __name__ == "__main__":
     pass

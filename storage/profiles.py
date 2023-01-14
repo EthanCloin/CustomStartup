@@ -1,6 +1,6 @@
 from __future__ import annotations
 from dataclasses import field, dataclass
-from openers.startup import StartupType
+from openers.startup import StartupRoutine
 import logging
 from logging.config import dictConfig
 from config import LOGGING_CONFIG, STORAGE_PATH
@@ -14,40 +14,42 @@ _log = logging.getLogger(__name__)
 class StartupProfile:
     """provides user local storage of their startup types"""
 
-    startup_modes: list[StartupType] = field(init=True)
-    mode_names: list[str] = field(init=False)
+    startups: list[StartupRoutine] = field(init=True)
+
+    # this list helps enforce 1 routine per name and provides
+    startup_names: list[str] = field(init=False)
     # ensure anytime a startup_mode is removed, its name
     # is also removed. a computed property like in vue would
     # be nice.
 
     def __post_init__(self):
-        self.mode_names = [startup.name for startup in self.startup_modes]
+        self.startup_names = [s.name for s in self.startups]
 
-    def store_startup(self, mode: StartupType) -> None:
+    def store_startup(self, startup: StartupRoutine) -> None:
         """adds startup_mode to file if one does not already exist under its name"""
-        if mode.name in self.mode_names:
-            raise KeyError("startup mode '%s' already exists!" % mode.name)
+        if startup.name in self.startup_names:
+            raise KeyError("startup '%s' already exists!" % startup.name)
 
-        self.startup_modes.append(mode)
-        self.mode_names.append(mode.name)
-        _log.debug("stored %s" % repr(mode))
+        self.startups.append(startup)
+        self.startup_names.append(startup.name)
+        _log.debug("stored %s" % repr(startup))
 
-    def fetch_startup(self, mode: StartupType) -> StartupType:
+    def fetch_startup(self, routine: StartupRoutine) -> StartupRoutine:
         """return startup_mode with provided name if it exists"""
 
-        if mode.name not in self.mode_names:
-            raise KeyError("startup mode '%s' does not exist!" % mode_name)
+        if routine.name not in self.startup_names:
+            raise KeyError("startup mode '%s' does not exist!" % routine.name)
 
-        return [mode for mode in self.startup_modes if mode.name == mode_name][0]
+        return [mode for mode in self.startups if mode.name == mode_name][0]
 
-    def remove_startup(self, mode: StartupType) -> None:
+    def remove_startup(self, routine: StartupRoutine) -> None:
         """removes startup_mode if it exists"""
-        if mode.name not in self.mode_names:
-            raise KeyError("startup mode '%s' does not exist!" % mode_name)
+        if routine.name not in self.startup_names:
+            raise KeyError("startup mode '%s' does not exist!" % routine.name)
 
-        self.startup_modes.remove(mode)
-        self.mode_names.remove(mode.name)
-        _log.debug("removed %s" % mode)
+        self.startups.remove(routine)
+        self.startup_names.remove(routine.name)
+        _log.debug("removed %s" % routine.name)
 
     # TODO: fix this to accomodate the change to 'remove_startup'.
     #   either add the ability to remove by name, or handle the mapping
