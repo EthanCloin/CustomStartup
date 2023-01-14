@@ -4,6 +4,7 @@ import argparse
 from openers.startup import WORK_BASICS, DEFAULT_STARTUP, TEST_STARTUP, StartupRoutine
 from config import LOGGING_CONFIG
 from storage.profiles import StartupProfile
+from gui import setup_profile
 
 
 logging.config.dictConfig(LOGGING_CONFIG)
@@ -58,10 +59,11 @@ def execute_startup_routine(routine: StartupRoutine):
 
 if __name__ == "__main__":
     # main()
+    setup_profile.main()
 
     # create instance, save to file, mutate, prove difference
-    my_manager = StartupProfile([])
-    _log.info(my_manager)
+    # my_manager = StartupProfile([])
+    # _log.info(my_manager)
     # _log.info("OG1: " + str(my_manager))
     # my_manager.save_to_file()
     # my_manager.remove_startup(TEST_STARTUP)
