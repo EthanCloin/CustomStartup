@@ -1,7 +1,7 @@
 import logging
 import logging.config
 import argparse
-from openers.startup import WORK_BASICS, DEFAULT_STARTUP, TEST_STARTUP
+from openers.startup import WORK_BASICS, DEFAULT_STARTUP, TEST_STARTUP, StartupRoutine
 from config import LOGGING_CONFIG
 from storage.profiles import StartupProfile
 
@@ -49,6 +49,11 @@ def main():
         TEST_STARTUP.run_startup()
     elif args.default:
         DEFAULT_STARTUP.run_startup()
+
+
+def execute_startup_routine(routine: StartupRoutine):
+    """runs the provided routine"""
+    routine.run_startup()
 
 
 if __name__ == "__main__":
