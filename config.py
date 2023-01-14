@@ -4,10 +4,12 @@ LOGGING_CONFIG = {
     "version": 1,
     "disable_existing_loggers": True,
     "formatters": {
-        "brief": {"format": "[%(levelname)-7s]: %(message)s"},
-        "standard": {"format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"},
+        "brief": {"format": "[%(levelname)s]: %(message)s"},
+        "standard": {
+            "format": "[%(levelname)s]: %(message)s (%(funcName)s) %(asctime)s"
+        },
         "verbose": {
-            "format": "%(asctime)s [%(levelname)s] %(name)s {%(funcName)s}: %(message)s"
+            "format": "[%(levelname)s]: %(message)s {%(name)s} (%(funcName)s) %(asctime)s "
         },
     },
     "handlers": {
