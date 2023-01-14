@@ -28,9 +28,7 @@ def open_all_sites(sites: list[SiteInfo]):
     for site in sites:
         profile_name: str = site.profile.name
         if profile_name not in open_browsers.keys():
-            new_browser: GenericBrowser = open_new_browser_with_profile(
-                site.profile
-            )
+            new_browser: GenericBrowser = open_new_browser_with_profile(site.profile)
             # store opened browsers in dictionary using profile_name as key
             open_browsers[profile_name]: GenericBrowser = new_browser
         open_browsers.get(profile_name).open(site.url)

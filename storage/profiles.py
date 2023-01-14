@@ -1,3 +1,11 @@
+"""
+primary manager of user startup routines. can be initialized with a list of StartupRoutines. 
+
+StartupProfile supports storing, fetching, updating, and removing StartupRoutines.
+Also supports saving and reading StartupProfile from a file.
+"""
+
+
 from __future__ import annotations
 from dataclasses import field, dataclass
 from openers.startup import StartupRoutine
@@ -14,19 +22,18 @@ _log = logging.getLogger(__name__)
 class StartupProfile:
     """provides user local storage of their startup types"""
 
-    startups: list[StartupRoutine] = field(init=True)
+    startups: list[StartupRoutine] = field(init=True, default_factory=list)
 
-    # this list helps enforce 1 routine per name and provides
-    startup_names: list[str] = field(init=False)
-    # ensure anytime a startup_mode is removed, its name
-    # is also removed. a computed property like in vue would
-    # be nice.
+    # this list helps enforce 1 routine per name
+    # ensure anytime a startup_mode is removed, its name is also removed.
+    # a computed property like in vue would be nice.
+    startup_names: list[str] = field(init=False, default_factory=list)
 
     def __post_init__(self):
         self.startup_names = [s.name for s in self.startups]
 
     def store_startup(self, startup: StartupRoutine) -> None:
-        """adds startup_mode to file if one does not already exist under its name"""
+        """adds startup_mode to instance if one does not already exist under its name"""
         if startup.name in self.startup_names:
             raise KeyError("startup '%s' already exists!" % startup.name)
 
@@ -34,13 +41,18 @@ class StartupProfile:
         self.startup_names.append(startup.name)
         _log.debug("stored %s" % repr(startup))
 
-    def fetch_startup(self, routine: StartupRoutine) -> StartupRoutine:
-        """return startup_mode with provided name if it exists"""
+    def fetch_startup(
+        self, routine: StartupRoutine = None, routine_name: str = ""
+    ) -> StartupRoutine:
+        """return startup_mode with provided routine object or name if it exists"""
 
-        if routine.name not in self.startup_names:
-            raise KeyError("startup mode '%s' does not exist!" % routine.name)
+        target_name = ""
+        target_name = routine.name if routine else routine_name
 
-        return [mode for mode in self.startups if mode.name == mode_name][0]
+        if target_name not in self.startup_names:
+            raise KeyError("startup mode '%s' does not exist!" % target_name)
+
+        return [s for s in self.startups if s.name == target_name][0]
 
     def remove_startup(self, routine: StartupRoutine) -> None:
         """removes startup_mode if it exists"""
@@ -54,20 +66,20 @@ class StartupProfile:
     # TODO: fix this to accomodate the change to 'remove_startup'.
     #   either add the ability to remove by name, or handle the mapping
     #   of name-->mode in this fxn.
-    # def update_startup(self, prev_name: str, updated_mode: StartupType):
-    #     try:
-    #         self.remove_startup(prev_name)
-    #         self.store_startup(updated_mode)
-    #     except KeyError as err:
-    #         _log.exception("unable to update startup '%s' " % prev_name)
-    #         raise
+    def update_startup(self, updated_routine: StartupRoutine, prev_name: str = ""):
+        """updates the routine to match provided object. include prev_name parameter if the
+        name value has changed"""
 
-    # def as_json(self):
-    #     """convert each component to its dict form,
+        # ensure previous version is removed when updated version has a different name
+        if prev_name and prev_name != updated_routine.name:
+            old_routine = self.fetch_startup(routine_name=prev_name)
+            self.remove_startup(old_routine)
+        else:
+            old_routine = self.fetch_startup(routine_name=updated_routine.name)
+            self.remove_startup(old_routine)
 
-    #     (dependent on added schema from marshmallow_dataclass)"""
-
-    #     return [pickle.dump(mode) for mode in self.startup_modes]
+        self.store_startup(updated_routine)
+        _log.debug("replaced %s with %s" % (old_routine, updated_routine))
 
     def save_to_file(self):
         # easiest way at first will be just overwrite every time
