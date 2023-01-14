@@ -3,6 +3,7 @@ import logging.config
 import argparse
 from openers.startup import WORK_BASICS, DEFAULT_STARTUP, TEST_STARTUP
 from config import LOGGING_CONFIG
+from storage.profiles import StartupProfile
 
 
 logging.config.dictConfig(LOGGING_CONFIG)
@@ -51,4 +52,14 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+
+    # create instance, save to file, mutate, prove difference
+    my_manager = StartupProfile([WORK_BASICS, TEST_STARTUP])
+    _log.info("OG1: " + str(my_manager))
+    my_manager.save_to_file()
+    my_manager.remove_startup(WORK_BASICS)
+    _log.info("OG2: " + str(my_manager))
+
+    stored_manager = StartupProfile.read_from_file()
+    _log.info("OG: " + str(stored_manager))

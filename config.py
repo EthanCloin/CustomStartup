@@ -39,4 +39,4 @@ LOGGING_CONFIG = {
         },
     },
 }
-STORAGE_PATH = Path("storage/user_startups.json")
+STORAGE_PATH = Path("storage/user_startups.pickle")
